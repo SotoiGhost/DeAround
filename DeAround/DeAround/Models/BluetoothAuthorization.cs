@@ -1,9 +1,8 @@
 using System;
 namespace DeAround.Models {
-	public enum BluetoothAuthorization {
+	public enum BluetoothPermissionStatus {
 		Unknown,
 		NotAllowed,
 		Allowed
 	}
 }
-

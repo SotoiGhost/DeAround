@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:DeAround"
+             xmlns:controls="clr-namespace:DeAround.Controls"
+             xmlns:viewModels="clr-namespace:DeAround.ViewModels"
+             x:Class="DeAround.Views.MainPage"
+             Title="DeAround">
+    <ContentPage.BindingContext>
+        <viewModels:BluetoothViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <DataTemplate x:Key="BasicEmptyView">
+            <StackLayout>
+                <Label Text="There's nothing to see here... 👀"
+                       Margin="10,25,10,10"
+                       FontAttributes="Bold"
+                       FontSize="18"
+                       HorizontalOptions="Fill"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Tap the 'Search' button above ⬆️ to start looking for devices. 📱"
+                       Margin="10,25,10,10"
+                       FontAttributes="Bold"
+                       FontSize="18"
+                       HorizontalOptions="Fill"
+                       HorizontalTextAlignment="Center" />
+            </StackLayout>
+        </DataTemplate>
+        <DataTemplate x:Key="NotAllowedEmptyView">
+            <StackLayout>
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Alternatively, click " />
+                            <Span Text="here"
+                                  TextColor="Blue"
+                                  TextDecorations="Underline">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding TapCommand}"
+                                                          CommandParameter="https://learn.microsoft.com/xamarin/" />
+                                </Span.GestureRecognizers>  
+                            </Span>
+                            <Span Text=" to view Xamarin documentation." />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label Text="No results matched your filter."
+                       Margin="10,25,10,10"
+                       FontAttributes="Bold"
+                       FontSize="18"
+                       HorizontalOptions="Fill"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Try a broader filter?"
+                       FontAttributes="Italic"
+                       FontSize="12"
+                       HorizontalOptions="Fill"
+                       HorizontalTextAlignment="Center" />
+            </StackLayout>
+        </DataTemplate>
+        <controls:BluetoothPermissionStateDataTemplateSelector x:Key="BluetoothPermissionStateSelector"
+                                                               DefaultTemplate="{StaticResource BasicEmptyView}"
+                                                               OtherTemplate="{StaticResource NotAllowedEmptyView}" />
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems> 
+        <ToolbarItem x:Name="btnSearch"
+                     Text="Search"
+                     Clicked="btnSearch_Clicked" />
+    </ContentPage.ToolbarItems>
+
+    <StackLayout>
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+             Command="{Binding RefreshCommand}">
+            <CollectionView x:Name="devicesCollection"
+                            ItemsSource="{Binding DeviceNames}"
+                            EmptyView="{Binding BluetoothPermissionStatus}"
+                            EmptyViewTemplate="{StaticResource BluetoothPermissionStateSelector}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Label Text="{Binding .}"
+                                   FontSize="Large"
+                                   FontAttributes="Bold" />
+                            <Label Grid.Row="1"
+                                   Text="Testing"
+                                   FontSize="Small"
+                                   FontAttributes="Italic" 
+                                   VerticalOptions="End" />
+                            <Line Grid.Row="2" X2="350" Stroke="Red" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </StackLayout>
+
+</ContentPage>

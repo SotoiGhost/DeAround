@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<ProduceReferenceAssembly>true</ProduceReferenceAssembly>
 		<LangVersion>9.0</LangVersion>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DebugType>portable</DebugType>
@@ -12,15 +13,20 @@
 	<ItemGroup>
 		<PackageReference Include="Xamarin.Forms" Version="5.0.0.2578" />
 		<PackageReference Include="Xamarin.Essentials" Version="1.7.5" />
+		<PackageReference Include="Rg.Plugins.Popup" Version="2.1.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Remove="Services\" />
 		<None Remove="Models\" />
 		<None Remove="ViewModels\" />
+		<None Remove="Views\" />
+		<None Remove="Controls\" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Services\" />
 		<Folder Include="Models\" />
 		<Folder Include="ViewModels\" />
+		<Folder Include="Views\" />
+		<Folder Include="Controls\" />
 	</ItemGroup>
 </Project>

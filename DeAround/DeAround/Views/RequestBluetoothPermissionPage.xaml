@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="http://rotorgames.com"
+    x:Class="DeAround.Views.RequestBluetoothPermissionPage">
+    <pages:PopupPage.Content>
+        <Frame HasShadow="False" CornerRadius="6"
+               HorizontalOptions="Center" VerticalOptions="Center" BackgroundColor="Aqua">
+            <StackLayout>
+                <Label x:Name="ClickOnBackgroundLabel"
+                        Text="Click on background"
+                        VerticalOptions="CenterAndExpand"
+                        HorizontalOptions="CenterAndExpand"/>
+                <Button TextColor="Black" BackgroundColor="White" Text="Close" Clicked="OnClose"></Button>
+            </StackLayout>
+        </Frame>
+    </pages:PopupPage.Content>
+</pages:PopupPage>
+

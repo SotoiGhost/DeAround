@@ -1,5 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Xamarin.Forms;
@@ -13,6 +15,7 @@ namespace DeAround.ViewModels {
 	public class BluetoothViewModel : BaseViewModel, IDisposable {
 
 		IBluetoothService bluetoothService;
+		CancellationTokenSource? source;
 
 		public ObservableCollection<string> DeviceNames { get; } = new ();
 		public ICommand RequestBluetoothPermissionCommand { get; private set; }
@@ -43,20 +46,58 @@ namespace DeAround.ViewModels {
 
 		void StartSearching ()
 		{
-			bluetoothService.StartScanning ();
 			OnPropertyChanged (nameof (IsSearching));
+			DeviceNames.Clear ();
+
+			if (source != null) {
+				source.Cancel ();
+				source = null;
+			}
+
+			source = new CancellationTokenSource ();
+			var token = source.Token;
+
+			Task.Factory.StartNew (async () => await SearchByIntervals (3, 1), token)
+				.ContinueWith (async _ => await StopSearchingAsync ());
+		}
+
+		async Task StartSearchingAsync ()
+		{
+			bluetoothService.StartScanning ();
+			await MainThread.InvokeOnMainThreadAsync (() => {
+				OnPropertyChanged (nameof (IsSearching));
+			});
 		}
 
 		void StopSearching ()
 		{
-			OnPropertyChanged (nameof (IsSearching));
-			bluetoothService.StopScanning ();
+			source?.Cancel ();
+			//bluetoothService.StopScanning ();
+			//OnPropertyChanged (nameof (IsSearching));
 		}
 
-		private void BluetoothService_UpdatedPermission (object sender, EventArgs e) =>
+		async Task StopSearchingAsync ()
+		{
+			bluetoothService.StopScanning ();
+			await MainThread.InvokeOnMainThreadAsync (() => {
+				OnPropertyChanged (nameof (IsSearching));
+			});
+		}
+
+		async Task SearchByIntervals (int searchingIntervalInSeconds, int pauseIntervalInSeconds)
+		{
+			do {
+				await StartSearchingAsync ();
+				Thread.Sleep (searchingIntervalInSeconds * 1000);
+				await StopSearchingAsync ();
+				Thread.Sleep (pauseIntervalInSeconds * 1000);
+			} while (true);
+		}
+
+		void BluetoothService_UpdatedPermission (object sender, EventArgs e) =>
 			OnPropertyChanged (nameof (BluetoothPermissionStatus));
 
-		private void BluetoothService_ChangedState (object sender, EventArgs e)
+		void BluetoothService_ChangedState (object sender, EventArgs e)
 		{
 			OnPropertyChanged (nameof (IsBluetoothSupported));
 			OnPropertyChanged (nameof (IsBluetoothEnabled));

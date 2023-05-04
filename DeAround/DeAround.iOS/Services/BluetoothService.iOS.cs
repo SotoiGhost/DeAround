@@ -124,7 +124,6 @@ namespace DeAround.iOS.Services {
 			bluetoothCentralManagerDelegate.StateUpdated += DidUpdateState;
 			bluetoothCentralManagerDelegate.PeripheralDiscovered += DidDiscoverPeripheral;
 			bluetoothCentralManager = new CBCentralManager (bluetoothCentralManagerDelegate, null);
-
 		}
 	}
 }

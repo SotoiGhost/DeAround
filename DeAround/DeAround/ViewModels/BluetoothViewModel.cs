@@ -16,10 +16,12 @@ namespace DeAround.ViewModels {
 
 		IBluetoothService bluetoothService;
 		CancellationTokenSource? source;
+		CancellationToken? token;
 
 		public ObservableCollection<string> DeviceNames { get; } = new ();
 		public ICommand RequestBluetoothPermissionCommand { get; private set; }
 		public ICommand StartSearchingCommand { get; private set; }
+		public ICommand StopSearchingCommand { get; private set; }
 
 		public bool IsFirstTime => Preferences.Get (PreferencesKeys.FirstTime, true);
 		public BluetoothPermissionStatus BluetoothPermissionStatus => bluetoothService.PermissionStatus;
@@ -31,6 +33,7 @@ namespace DeAround.ViewModels {
 		{
 			RequestBluetoothPermissionCommand = new Command (RequestBluetoothPermission);
 			StartSearchingCommand = new Command (StartSearching);
+			StopSearchingCommand = new Command (StopSearching);
 			bluetoothService = DependencyService.Get<IBluetoothService> ();
 			bluetoothService.UpdatedPermission += BluetoothService_UpdatedPermission;
 			bluetoothService.UpdatedState += BluetoothService_ChangedState;
@@ -55,10 +58,10 @@ namespace DeAround.ViewModels {
 			}
 
 			source = new CancellationTokenSource ();
-			var token = source.Token;
+			token = source.Token;
 
-			Task.Factory.StartNew (async () => await SearchByIntervals (3, 1), token)
-				.ContinueWith (async _ => await StopSearchingAsync ());
+			Task.Factory.StartNew (async () => await SearchByIntervals (3, 1, (CancellationToken) token), (CancellationToken) token)
+				.ContinueWith (async _ => await StopSearchingAsync (), TaskContinuationOptions.OnlyOnCanceled);
 		}
 
 		async Task StartSearchingAsync ()
@@ -72,8 +75,6 @@ namespace DeAround.ViewModels {
 		void StopSearching ()
 		{
 			source?.Cancel ();
-			//bluetoothService.StopScanning ();
-			//OnPropertyChanged (nameof (IsSearching));
 		}
 
 		async Task StopSearchingAsync ()
@@ -84,14 +85,14 @@ namespace DeAround.ViewModels {
 			});
 		}
 
-		async Task SearchByIntervals (int searchingIntervalInSeconds, int pauseIntervalInSeconds)
+		async Task SearchByIntervals (int searchingIntervalInSeconds, int pauseIntervalInSeconds, CancellationToken token)
 		{
 			do {
 				await StartSearchingAsync ();
 				Thread.Sleep (searchingIntervalInSeconds * 1000);
 				await StopSearchingAsync ();
 				Thread.Sleep (pauseIntervalInSeconds * 1000);
-			} while (true);
+			} while (!token.IsCancellationRequested);
 		}
 
 		void BluetoothService_UpdatedPermission (object sender, EventArgs e) =>

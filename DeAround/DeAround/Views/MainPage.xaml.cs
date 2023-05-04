@@ -27,20 +27,14 @@ namespace DeAround.Views {
 				var page = new RequestBluetoothPermissionPage ();
 				await PopupNavigation.Instance.PushAsync (page);
 			} else {
-				bluetoothViewModel.StartSearchingCommand.Execute (null);
+				if (bluetoothViewModel.IsSearching) {
+					bluetoothViewModel.StopSearchingCommand.Execute (null);
+					btnSearch.Text = "Search";
+				} else {
+					bluetoothViewModel.StartSearchingCommand.Execute (null);
+					btnSearch.Text = "Stop";
+				}
 			}
-		}
-
-		void btnAuth_Clicked (System.Object sender, System.EventArgs e)
-		{
-			var bluetoothViewModel = (BluetoothViewModel) BindingContext;
-			devicesCollection.EmptyView = bluetoothViewModel.BluetoothPermissionStatus.ToString ();
-		}
-
-		void btnState_Clicked (System.Object sender, System.EventArgs e)
-		{
-			var bluetoothViewModel = (BluetoothViewModel) BindingContext;
-			devicesCollection.EmptyView = bluetoothViewModel.IsBluetoothEnabled.ToString ();
 		}
 	}
 }

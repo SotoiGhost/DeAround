@@ -33,12 +33,6 @@
         <ToolbarItem x:Name="btnSearch"
                      Text="Search"
                      Clicked="btnSearch_Clicked" />
-        <ToolbarItem x:Name="btnAuth"
-                     Text="Auth"
-                     Clicked="btnAuth_Clicked" />
-        <ToolbarItem x:Name="btnState"
-                     Text="State"
-                     Clicked="btnState_Clicked" />
     </ContentPage.ToolbarItems>
 
     <StackLayout>

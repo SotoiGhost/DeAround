@@ -60,21 +60,14 @@ namespace DeAround.ViewModels {
 			source = new CancellationTokenSource ();
 			token = source.Token;
 
-			Task.Factory.StartNew (async () => await SearchByIntervals (3, 1, (CancellationToken) token), (CancellationToken) token)
-				.ContinueWith (async _ => await StopSearchingAsync (), TaskContinuationOptions.OnlyOnCanceled);
-		}
-
-		async Task StartSearchingAsync ()
-		{
-			bluetoothService.StartScanning ();
-			await MainThread.InvokeOnMainThreadAsync (() => {
-				OnPropertyChanged (nameof (IsSearching));
-			});
+			Task.Factory.StartNew (async () => await SearchByIntervals (3, 1, (CancellationToken) token), (CancellationToken) token);
 		}
 
 		void StopSearching ()
 		{
 			source?.Cancel ();
+			bluetoothService.StopScanning ();
+			OnPropertyChanged (nameof (IsSearching));
 		}
 
 		async Task StopSearchingAsync ()
@@ -88,11 +81,18 @@ namespace DeAround.ViewModels {
 		async Task SearchByIntervals (int searchingIntervalInSeconds, int pauseIntervalInSeconds, CancellationToken token)
 		{
 			do {
-				await StartSearchingAsync ();
-				Thread.Sleep (searchingIntervalInSeconds * 1000);
-				await StopSearchingAsync ();
-				Thread.Sleep (pauseIntervalInSeconds * 1000);
-			} while (!token.IsCancellationRequested);
+				if (token.IsCancellationRequested) return;
+
+				bluetoothService.StartScanning ();
+				await Task.Delay (searchingIntervalInSeconds * 1000, token);
+
+				if (token.IsCancellationRequested) return;
+
+				bluetoothService.StopScanning ();
+				await Task.Delay (pauseIntervalInSeconds * 1000, token);
+
+				if (token.IsCancellationRequested) return;
+			} while (true);
 		}
 
 		void BluetoothService_UpdatedPermission (object sender, EventArgs e) =>

@@ -17,6 +17,7 @@ namespace DeAround.iOS.Services {
 		#region Fields
 		CBCentralManager? bluetoothCentralManager;
 		DeAroundCentralManagerDelegate? bluetoothCentralManagerDelegate;
+		static object lockObject = new ();
 		#endregion
 
 		#region Constructors
@@ -80,7 +81,10 @@ namespace DeAround.iOS.Services {
 				StopScanning ();
 
 			bluetoothCentralManager?.ScanForPeripherals (peripheralUuids: null, options: (NSDictionary?) null);
-			IsScanning = true;
+
+			lock (lockObject) {
+				IsScanning = true;
+			}
 		}
 
 		public void StopScanning ()
@@ -88,7 +92,9 @@ namespace DeAround.iOS.Services {
 			if (PermissionStatus == BluetoothPermissionStatus.Allowed)
 				InitializeBluetoothIfNeeded ();
 
-			IsScanning = false;
+			lock (lockObject) {
+				IsScanning = false;
+			}
 			bluetoothCentralManager?.StopScan ();
 		}
 

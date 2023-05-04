@@ -26,6 +26,7 @@ namespace DeAround.Droid.Services {
 		BluetoothAdapter? bluetoothAdapter;
 		BluetoothLeScanner? bluetoothLeScanner;
 		BluetoothLeScanCallback bluetoothLeScanCallback;
+		static object lockObject = new ();
 
 		#endregion
 
@@ -84,12 +85,16 @@ namespace DeAround.Droid.Services {
 				StopScanning ();
 
 			bluetoothLeScanner?.StartScan (bluetoothLeScanCallback);
-			IsScanning = true;
+			lock (lockObject) {
+				IsScanning = true;
+			}
 		}
 
 		public void StopScanning ()
 		{
-			IsScanning = false;
+			lock (lockObject) {
+				IsScanning = false;
+			}
 			bluetoothLeScanner?.StopScan (bluetoothLeScanCallback);
 		}
 

@@ -27,8 +27,6 @@ namespace DeAround.Services {
 		/// <returns></returns>
 		bool IsEnabled { get; }
 
-		bool IsScanning { get; }
-
 		/// <summary>
 		/// Start scanning for devices with the Bluetooth enabled.
 		/// </summary>

@@ -27,7 +27,7 @@ namespace DeAround.Views {
 				var page = new RequestBluetoothPermissionPage ();
 				await PopupNavigation.Instance.PushAsync (page);
 			} else {
-				if (bluetoothViewModel.IsSearching) {
+				if (bluetoothViewModel.Searching) {
 					bluetoothViewModel.StopSearchingCommand.Execute (null);
 					btnSearch.Text = "Search";
 				} else {

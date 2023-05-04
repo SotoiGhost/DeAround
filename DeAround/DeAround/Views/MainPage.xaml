@@ -36,8 +36,7 @@
     </ContentPage.ToolbarItems>
 
     <StackLayout>
-        <RefreshView IsRefreshing="{Binding IsRefreshing}"
-             Command="{Binding RefreshCommand}">
+        <RefreshView IsRefreshing="{Binding Searching}">
             <CollectionView x:Name="devicesCollection"
                             ItemsSource="{Binding DeviceNames}"
                             EmptyView="{StaticResource BasicEmptyView}">

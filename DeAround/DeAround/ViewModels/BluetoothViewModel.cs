@@ -14,6 +14,7 @@ using DeAround.Services;
 namespace DeAround.ViewModels {
 	public class BluetoothViewModel : BaseViewModel, IDisposable {
 
+		bool searching;
 		IBluetoothService bluetoothService;
 		CancellationTokenSource? source;
 		CancellationToken? token;
@@ -27,7 +28,10 @@ namespace DeAround.ViewModels {
 		public BluetoothPermissionStatus BluetoothPermissionStatus => bluetoothService.PermissionStatus;
 		public bool IsBluetoothSupported => bluetoothService.IsSupported;
 		public bool IsBluetoothEnabled => bluetoothService.IsEnabled;
-		public bool IsSearching => bluetoothService.IsScanning;
+		public bool Searching {
+			get => searching;
+			set => SetProperty (ref searching, value);
+		}
 
 		public BluetoothViewModel ()
 		{
@@ -49,7 +53,7 @@ namespace DeAround.ViewModels {
 
 		void StartSearching ()
 		{
-			OnPropertyChanged (nameof (IsSearching));
+			Searching = true;
 			DeviceNames.Clear ();
 
 			if (source != null) {
@@ -67,15 +71,7 @@ namespace DeAround.ViewModels {
 		{
 			source?.Cancel ();
 			bluetoothService.StopScanning ();
-			OnPropertyChanged (nameof (IsSearching));
-		}
-
-		async Task StopSearchingAsync ()
-		{
-			bluetoothService.StopScanning ();
-			await MainThread.InvokeOnMainThreadAsync (() => {
-				OnPropertyChanged (nameof (IsSearching));
-			});
+			Searching = false;
 		}
 
 		async Task SearchByIntervals (int searchingIntervalInSeconds, int pauseIntervalInSeconds, CancellationToken token)

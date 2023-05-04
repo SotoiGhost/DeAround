@@ -22,11 +22,10 @@ namespace DeAround.Droid.Services {
 
 		#region Fields
 
-		BluetoothManager bluetoothManager;
+		BluetoothManager? bluetoothManager;
 		BluetoothAdapter? bluetoothAdapter;
 		BluetoothLeScanner? bluetoothLeScanner;
 		BluetoothLeScanCallback bluetoothLeScanCallback;
-		static object lockObject = new ();
 
 		#endregion
 
@@ -34,8 +33,8 @@ namespace DeAround.Droid.Services {
 
 		public BluetoothService ()
 		{
-			bluetoothManager = (BluetoothManager) MainApplication.ActivityContext.GetSystemService (Context.BluetoothService)!;
-			bluetoothAdapter = bluetoothManager.Adapter;
+			bluetoothManager = (BluetoothManager) MainApplication.ActivityContext?.GetSystemService (Context.BluetoothService)!;
+			bluetoothAdapter = bluetoothManager?.Adapter;
 			bluetoothLeScanner = bluetoothAdapter?.BluetoothLeScanner;
 			bluetoothLeScanCallback = new ();
 			bluetoothLeScanCallback.DiscoveredDevice += BluetoothLeScanCallback_DiscoveredDevice;
@@ -77,24 +76,14 @@ namespace DeAround.Droid.Services {
 
 		public bool IsEnabled => bluetoothAdapter?.IsEnabled ?? false;
 
-		public bool IsScanning { get; private set; }
-
 		public void StartScanning ()
 		{
-			if (IsScanning)
-				StopScanning ();
-
+			StopScanning ();
 			bluetoothLeScanner?.StartScan (bluetoothLeScanCallback);
-			lock (lockObject) {
-				IsScanning = true;
-			}
 		}
 
 		public void StopScanning ()
 		{
-			lock (lockObject) {
-				IsScanning = false;
-			}
 			bluetoothLeScanner?.StopScan (bluetoothLeScanCallback);
 		}
 

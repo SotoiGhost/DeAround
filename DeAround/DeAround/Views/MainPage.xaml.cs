@@ -25,6 +25,8 @@ namespace DeAround.Views {
 
 			if (bluetoothViewModel.BluetoothPermissionStatus == BluetoothPermissionStatus.Allowed && bluetoothViewModel.IsBluetoothEnabled) {
 				bluetoothViewModel.StartSearchingCommand.Execute (null);
+				//bluetoothViewModel.RequestBluetoothPermissionCommand.Execute (null);
+
 			} else {
 				var page = new RequestBluetoothPermissionPage ();
 				page.BindingContext = bluetoothViewModel;

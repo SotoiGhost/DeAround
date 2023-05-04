@@ -70,6 +70,7 @@
 		<Compile Include="MainApplication.cs" />
 		<Compile Include="Callbacks\BluetoothLeScanCallback.cs" />
 		<Compile Include="Constants\PermissionConstants.cs" />
+		<Compile Include="Callbacks\BackPressedCallback.cs" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="Resources\AboutResources.txt" />

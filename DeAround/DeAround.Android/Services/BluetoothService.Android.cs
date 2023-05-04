@@ -18,6 +18,7 @@ using DeAround.Models;
 [assembly: Dependency (typeof (DeAround.Droid.Services.BluetoothService))]
 namespace DeAround.Droid.Services {
 	public class BluetoothService : IBluetoothService {
+		public const int RequestCode = 1000;
 
 		#region Fields
 
@@ -64,28 +65,32 @@ namespace DeAround.Droid.Services {
 
 		public void RequestPermission ()
 		{
+			var availablePermissions = PermissionConstants.BluetoothPermissions.Where (p => Android.OS.Build.VERSION.SdkInt >= p.Value)
+				.Select (kv => kv.Key)
+				.ToArray ();
 			var activity = (Activity) MainApplication.ActivityContext!;
-			activity.RequestPermissions (new { Manifest.Permission.Bluetooth, Manifest.Permission.BluetoothAdmin, Manifest.Permission.BluetoothScan }, );
+			activity.RequestPermissions (availablePermissions, RequestCode);
 		}
 
 		public bool IsSupported => bluetoothAdapter != null;
 
 		public bool IsEnabled => bluetoothAdapter?.IsEnabled ?? false;
 
+		public bool IsScanning { get; private set; }
+
 		public void StartScanning ()
 		{
-			if (!IsSupported || !IsEnabled)
-				return;
+			if (IsScanning)
+				StopScanning ();
 
-			bluetoothLeScanner!.StartScan (bluetoothLeScanCallback);
+			bluetoothLeScanner?.StartScan (bluetoothLeScanCallback);
+			IsScanning = true;
 		}
 
 		public void StopScanning ()
 		{
-			if (!IsSupported || !IsEnabled)
-				return;
-
-			bluetoothLeScanner!.StopScan (bluetoothLeScanCallback);
+			IsScanning = false;
+			bluetoothLeScanner?.StopScan (bluetoothLeScanCallback);
 		}
 
 		public void OpenSettings ()

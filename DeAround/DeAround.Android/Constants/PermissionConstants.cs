@@ -8,7 +8,7 @@ namespace DeAround.Droid.Constants {
 			[Manifest.Permission.Bluetooth] = Android.OS.BuildVersionCodes.Donut,
 			[Manifest.Permission.BluetoothAdmin] = Android.OS.BuildVersionCodes.Donut,
 			[Manifest.Permission.BluetoothScan] = Android.OS.BuildVersionCodes.S,
+			[Manifest.Permission.AccessCoarseLocation] = Android.OS.BuildVersionCodes.Donut,
 		};
 	}
 }
-

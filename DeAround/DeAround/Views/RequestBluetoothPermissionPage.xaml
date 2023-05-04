@@ -15,7 +15,7 @@
                        FontSize="Body"
                        HorizontalOptions="Fill"
                        HorizontalTextAlignment="Center" />
-                <Label Text="To do so, we need your permission to access the Bluetooth."
+                <Label Text="To do so, we need your permission to access the Bluetooth and maybe for your location."
                        Margin="10,0,10,0"
                        FontAttributes="Bold"
                        FontSize="Body"

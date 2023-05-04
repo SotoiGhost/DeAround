@@ -3,12 +3,14 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 using Xamarin.Forms;
+using Xamarin.Essentials;
 
+using DeAround.Constants;
 using DeAround.Models;
 using DeAround.Services;
 
 namespace DeAround.ViewModels {
-	public class BluetoothViewModel : BaseViewModel {
+	public class BluetoothViewModel : BaseViewModel, IDisposable {
 
 		IBluetoothService bluetoothService;
 
@@ -16,6 +18,7 @@ namespace DeAround.ViewModels {
 		public ICommand RequestBluetoothPermissionCommand { get; private set; }
 		public ICommand StartSearchingCommand { get; private set; }
 
+		public bool IsFirstTime => Preferences.Get (PreferencesKeys.FirstTime, true);
 		public BluetoothPermissionStatus BluetoothPermissionStatus => bluetoothService.PermissionStatus;
 		public bool IsBluetoothSupported => bluetoothService.IsSupported;
 		public bool IsBluetoothEnabled => bluetoothService.IsEnabled;
@@ -25,14 +28,18 @@ namespace DeAround.ViewModels {
 		{
 			RequestBluetoothPermissionCommand = new Command (RequestBluetoothPermission);
 			StartSearchingCommand = new Command (StartSearching);
-			//AddDummyData ();
 			bluetoothService = DependencyService.Get<IBluetoothService> ();
 			bluetoothService.UpdatedPermission += BluetoothService_UpdatedPermission;
 			bluetoothService.UpdatedState += BluetoothService_ChangedState;
 			bluetoothService.DiscoveredDevice += BluetoothService_DiscoveredDevice;
 		}
 
-		void RequestBluetoothPermission () => bluetoothService.RequestPermission ();
+		void RequestBluetoothPermission ()
+		{
+			Preferences.Set (PreferencesKeys.FirstTime, false);
+			bluetoothService.RequestPermission ();
+			OnPropertyChanged (nameof (IsFirstTime));
+		}
 
 		void StartSearching ()
 		{
@@ -44,13 +51,6 @@ namespace DeAround.ViewModels {
 		{
 			OnPropertyChanged (nameof (IsSearching));
 			bluetoothService.StopScanning ();
-		}
-
-		void AddDummyData ()
-		{
-			for (int i = 1; i < 50; i++) {
-				DeviceNames.Add ($"Device {i}");
-			}
 		}
 
 		private void BluetoothService_UpdatedPermission (object sender, EventArgs e) =>
@@ -66,6 +66,13 @@ namespace DeAround.ViewModels {
 		{
 			if (!string.IsNullOrWhiteSpace (e.DeviceName) && !DeviceNames.Contains (e.DeviceName))
 				DeviceNames.Add (e.DeviceName);
+		}
+
+		public void Dispose ()
+		{
+			bluetoothService.UpdatedPermission -= BluetoothService_UpdatedPermission;
+			bluetoothService.UpdatedState -= BluetoothService_ChangedState;
+			bluetoothService.DiscoveredDevice -= BluetoothService_DiscoveredDevice;
 		}
 	}
 }

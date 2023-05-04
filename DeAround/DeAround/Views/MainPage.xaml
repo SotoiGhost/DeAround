@@ -29,7 +29,7 @@
         </ContentView>
     </ContentPage.Resources>
 
-    <ContentPage.ToolbarItems> 
+    <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="btnSearch"
                      Text="Search"
                      Clicked="btnSearch_Clicked" />

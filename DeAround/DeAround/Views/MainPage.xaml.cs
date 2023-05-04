@@ -23,14 +23,11 @@ namespace DeAround.Views {
 		{
 			var bluetoothViewModel = (BluetoothViewModel) BindingContext;
 
-			if (bluetoothViewModel.BluetoothPermissionStatus == BluetoothPermissionStatus.Allowed && bluetoothViewModel.IsBluetoothEnabled) {
-				bluetoothViewModel.StartSearchingCommand.Execute (null);
-				//bluetoothViewModel.RequestBluetoothPermissionCommand.Execute (null);
-
-			} else {
+			if (bluetoothViewModel.IsFirstTime) {
 				var page = new RequestBluetoothPermissionPage ();
-				page.BindingContext = bluetoothViewModel;
 				await PopupNavigation.Instance.PushAsync (page);
+			} else {
+				bluetoothViewModel.StartSearchingCommand.Execute (null);
 			}
 		}
 

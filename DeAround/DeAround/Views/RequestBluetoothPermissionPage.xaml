@@ -3,8 +3,14 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="http://rotorgames.com"
+    xmlns:viewModels="clr-namespace:DeAround.ViewModels"
     x:Class="DeAround.Views.RequestBluetoothPermissionPage"
     Padding="20, 0, 20, 0">
+
+    <pages:PopupPage.BindingContext>
+        <viewModels:BluetoothViewModel />
+    </pages:PopupPage.BindingContext>
+
     <pages:PopupPage.Content>
         <Frame HasShadow="False" CornerRadius="6"
                HorizontalOptions="Center" VerticalOptions="Center" BackgroundColor="Aqua">
@@ -15,7 +21,7 @@
                        FontSize="Body"
                        HorizontalOptions="Fill"
                        HorizontalTextAlignment="Center" />
-                <Label Text="To do so, we need your permission to access the Bluetooth and maybe for your location."
+                <Label Text="To do so, we need your permission to access the Bluetooth service and maybe for your location."
                        Margin="10,0,10,0"
                        FontAttributes="Bold"
                        FontSize="Body"
@@ -28,7 +34,7 @@
                        HorizontalOptions="Fill"
                        HorizontalTextAlignment="Center" />
                 <Button Text="Go ahead!"
-                        Command="{Binding RequestBluetoothPermissionCommand}"
+                        Clicked="Request_Clicked"
                         Margin="10,20,10,0" />
                 <Button Text="Cancel"
                         Margin="10,0,10,0"

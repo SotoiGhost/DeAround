@@ -1,12 +1,14 @@
 using System;
 
 using CoreBluetooth;
+using Foundation;
 using UIKit;
+
 using Xamarin.Forms;
 
+using DeAround.iOS.Delegates;
 using DeAround.Models;
 using DeAround.Services;
-using Foundation;
 
 [assembly: Dependency (typeof (DeAround.iOS.Services.BluetoothService))]
 namespace DeAround.iOS.Services {
@@ -14,6 +16,7 @@ namespace DeAround.iOS.Services {
 
 		#region Fields
 		CBCentralManager? bluetoothCentralManager;
+		DeAroundCentralManagerDelegate? bluetoothCentralManagerDelegate;
 		#endregion
 
 		#region Constructors
@@ -70,6 +73,9 @@ namespace DeAround.iOS.Services {
 
 		public void StartScanning ()
 		{
+			if (PermissionStatus == BluetoothPermissionStatus.Allowed)
+				InitializeBluetoothIfNeeded ();
+
 			if (IsScanning)
 				StopScanning ();
 
@@ -79,6 +85,9 @@ namespace DeAround.iOS.Services {
 
 		public void StopScanning ()
 		{
+			if (PermissionStatus == BluetoothPermissionStatus.Allowed)
+				InitializeBluetoothIfNeeded ();
+
 			IsScanning = false;
 			bluetoothCentralManager?.StopScan ();
 		}
@@ -99,9 +108,9 @@ namespace DeAround.iOS.Services {
 			UpdatedState?.Invoke (this, EventArgs.Empty);
 		}
 
-		private void DidDiscoverPeripheral (object sender, CBDiscoveredPeripheralEventArgs e)
+		private void DidDiscoverPeripheral (object sender, BluetoothServiceDiscoveredDeviceEventArgs e)
 		{
-			DiscoveredDevice?.Invoke (this, new BluetoothServiceDiscoveredDeviceEventArgs (e.Peripheral.Name ?? ""));
+			DiscoveredDevice?.Invoke (this, e);
 		}
 
 		#endregion
@@ -111,9 +120,11 @@ namespace DeAround.iOS.Services {
 			if (bluetoothCentralManager != null)
 				return;
 
-			bluetoothCentralManager = new CBCentralManager ();
-			bluetoothCentralManager.UpdatedState += DidUpdateState;
-			bluetoothCentralManager.DiscoveredPeripheral += DidDiscoverPeripheral;
+			bluetoothCentralManagerDelegate = new ();
+			bluetoothCentralManagerDelegate.StateUpdated += DidUpdateState;
+			bluetoothCentralManagerDelegate.PeripheralDiscovered += DidDiscoverPeripheral;
+			bluetoothCentralManager = new CBCentralManager (bluetoothCentralManagerDelegate, null);
+
 		}
 	}
 }

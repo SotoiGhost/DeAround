@@ -11,7 +11,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.Resources>
-        <ContentView x:Key="BasicEmptyView">
+        <DataTemplate x:Key="WelcomeEmptyView">
             <StackLayout>
                 <Label Text="There's nothing to see here... 👀"
                        Margin="10,20,10,0"
@@ -26,7 +26,20 @@
                        HorizontalOptions="Fill"
                        HorizontalTextAlignment="Center" />
             </StackLayout>
-        </ContentView>
+        </DataTemplate>
+        <DataTemplate x:Key="SearchingEmptyView">
+            <StackLayout>
+                <Label Text="Looking for devices... 📱👀"
+                       Margin="10,20,10,0"
+                       FontAttributes="Bold"
+                       FontSize="Body"
+                       HorizontalOptions="Fill"
+                       HorizontalTextAlignment="Center" />
+            </StackLayout>
+        </DataTemplate>
+        <controls:SearchingDataTemplateSelector x:Key="SearchingDataTemplateSelector"
+                                                DefaultTemplate="{StaticResource WelcomeEmptyView}"
+                                                OtherTemplate="{StaticResource SearchingEmptyView}" />
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
@@ -39,7 +52,8 @@
         <RefreshView IsRefreshing="{Binding Searching}">
             <CollectionView x:Name="devicesCollection"
                             ItemsSource="{Binding DeviceNames}"
-                            EmptyView="{StaticResource BasicEmptyView}">
+                            EmptyView="{Binding Searching}"
+                            EmptyViewTemplate="{StaticResource SearchingDataTemplateSelector}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="10">

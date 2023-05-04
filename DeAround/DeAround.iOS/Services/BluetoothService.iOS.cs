@@ -44,22 +44,44 @@ namespace DeAround.iOS.Services {
 
 		public void RequestPermission ()
 		{
-			bluetoothCentralManager = new CBCentralManager ();
-			bluetoothCentralManager.UpdatedState += DidUpdateState;
-			bluetoothCentralManager.DiscoveredPeripheral += DidDiscoverPeripheral;
-
+			InitializeBluetoothIfNeeded ();
 			UpdatedPermission?.Invoke (this, EventArgs.Empty);
 		}
 
-		public bool IsSupported => bluetoothCentralManager?.State != CBCentralManagerState.Unsupported;
+		public bool IsSupported {
+			get {
+				if (PermissionStatus == BluetoothPermissionStatus.Allowed)
+					InitializeBluetoothIfNeeded ();
 
-		public bool IsEnabled => bluetoothCentralManager?.State == CBCentralManagerState.PoweredOn;
+				return bluetoothCentralManager?.State != CBCentralManagerState.Unsupported;
+			}
+		}
 
-		public void StartScanning () =>
+		public bool IsEnabled {
+			get {
+				if (PermissionStatus == BluetoothPermissionStatus.Allowed)
+					InitializeBluetoothIfNeeded ();
+
+				return bluetoothCentralManager?.State == CBCentralManagerState.PoweredOn;
+			}
+		}
+
+		public bool IsScanning { get; private set; }
+
+		public void StartScanning ()
+		{
+			if (IsScanning)
+				StopScanning ();
+
 			bluetoothCentralManager?.ScanForPeripherals (peripheralUuids: null, options: (NSDictionary?) null);
+			IsScanning = true;
+		}
 
-		public void StopScanning () =>
+		public void StopScanning ()
+		{
+			IsScanning = false;
 			bluetoothCentralManager?.StopScan ();
+		}
 
 		public void OpenSettings ()
 		{
@@ -83,5 +105,15 @@ namespace DeAround.iOS.Services {
 		}
 
 		#endregion
+
+		void InitializeBluetoothIfNeeded ()
+		{
+			if (bluetoothCentralManager != null)
+				return;
+
+			bluetoothCentralManager = new CBCentralManager ();
+			bluetoothCentralManager.UpdatedState += DidUpdateState;
+			bluetoothCentralManager.DiscoveredPeripheral += DidDiscoverPeripheral;
+		}
 	}
 }

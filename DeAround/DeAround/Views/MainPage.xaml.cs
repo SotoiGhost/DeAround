@@ -23,15 +23,25 @@ namespace DeAround.Views {
 		{
 			var bluetoothViewModel = (BluetoothViewModel) BindingContext;
 
-			//devicesCollection.EmptyView = bluetoothViewModel.BluetoothPermissionStatus.ToString ();
+			if (bluetoothViewModel.BluetoothPermissionStatus == BluetoothPermissionStatus.Allowed && bluetoothViewModel.IsBluetoothEnabled) {
+				bluetoothViewModel.StartSearchingCommand.Execute (null);
+			} else {
+				var page = new RequestBluetoothPermissionPage ();
+				page.BindingContext = bluetoothViewModel;
+				await PopupNavigation.Instance.PushAsync (page);
+			}
+		}
 
-			//if (bluetoothViewModel.BluetoothPermissionStatus == BluetoothPermissionStatus.Allowed) {
+		void btnAuth_Clicked (System.Object sender, System.EventArgs e)
+		{
+			var bluetoothViewModel = (BluetoothViewModel) BindingContext;
+			devicesCollection.EmptyView = bluetoothViewModel.BluetoothPermissionStatus.ToString ();
+		}
 
-			//} else {
-			//	var page = new RequestBluetoothPermissionPage ();
-			//	page.BindingContext = bluetoothViewModel;
-			//	await PopupNavigation.Instance.PushAsync (page);
-			//}
+		void btnState_Clicked (System.Object sender, System.EventArgs e)
+		{
+			var bluetoothViewModel = (BluetoothViewModel) BindingContext;
+			devicesCollection.EmptyView = bluetoothViewModel.IsBluetoothEnabled.ToString ();
 		}
 	}
 }

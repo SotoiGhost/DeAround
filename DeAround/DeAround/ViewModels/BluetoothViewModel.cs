@@ -13,15 +13,18 @@ namespace DeAround.ViewModels {
 		IBluetoothService bluetoothService;
 
 		public ObservableCollection<string> DeviceNames { get; } = new ();
-		public ICommand InitializeBluetoothCommand { get; private set; }
+		public ICommand RequestBluetoothPermissionCommand { get; private set; }
+		public ICommand StartSearchingCommand { get; private set; }
 
-		public BluetoothPermissionStatus BluetoothPermissionStatus { get => bluetoothService.PermissionStatus; }
-		public bool IsBluetoothSupported { get => bluetoothService.IsSupported; }
-		public bool IsBluetoothEnabled { get => bluetoothService.IsEnabled; }
+		public BluetoothPermissionStatus BluetoothPermissionStatus => bluetoothService.PermissionStatus;
+		public bool IsBluetoothSupported => bluetoothService.IsSupported;
+		public bool IsBluetoothEnabled => bluetoothService.IsEnabled;
+		public bool IsSearching => bluetoothService.IsScanning;
 
 		public BluetoothViewModel ()
 		{
-			InitializeBluetoothCommand = new Command (InitializeBluetooth);
+			RequestBluetoothPermissionCommand = new Command (RequestBluetoothPermission);
+			StartSearchingCommand = new Command (StartSearching);
 			//AddDummyData ();
 			bluetoothService = DependencyService.Get<IBluetoothService> ();
 			bluetoothService.UpdatedPermission += BluetoothService_UpdatedPermission;
@@ -29,9 +32,18 @@ namespace DeAround.ViewModels {
 			bluetoothService.DiscoveredDevice += BluetoothService_DiscoveredDevice;
 		}
 
-		void InitializeBluetooth ()
+		void RequestBluetoothPermission () => bluetoothService.RequestPermission ();
+
+		void StartSearching ()
 		{
 			bluetoothService.StartScanning ();
+			OnPropertyChanged (nameof (IsSearching));
+		}
+
+		void StopSearching ()
+		{
+			OnPropertyChanged (nameof (IsSearching));
+			bluetoothService.StopScanning ();
 		}
 
 		void AddDummyData ()

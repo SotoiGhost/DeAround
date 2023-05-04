@@ -21,6 +21,7 @@
 		<None Remove="ViewModels\" />
 		<None Remove="Views\" />
 		<None Remove="Controls\" />
+		<None Remove="Converters\" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Services\" />
@@ -28,5 +29,6 @@
 		<Folder Include="ViewModels\" />
 		<Folder Include="Views\" />
 		<Folder Include="Controls\" />
+		<Folder Include="Converters\" />
 	</ItemGroup>
 </Project>

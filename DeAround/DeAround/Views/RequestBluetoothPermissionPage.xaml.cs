@@ -15,7 +15,15 @@ namespace DeAround.Views {
 
 		void OnClose (object sender, EventArgs e)
 		{
-			PopupNavigation.Instance.PopAsync ();
+			ClosePopup ();
 		}
+
+		void Cancel_Clicked (System.Object sender, System.EventArgs e)
+		{
+			ClosePopup ();
+		}
+
+		void ClosePopup () =>
+			PopupNavigation.Instance.PopAsync ();
 	}
 }

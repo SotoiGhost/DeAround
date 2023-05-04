@@ -11,62 +11,34 @@
     </ContentPage.BindingContext>
 
     <ContentPage.Resources>
-        <DataTemplate x:Key="BasicEmptyView">
+        <ContentView x:Key="BasicEmptyView">
             <StackLayout>
                 <Label Text="There's nothing to see here... 👀"
-                       Margin="10,25,10,10"
+                       Margin="10,20,10,0"
                        FontAttributes="Bold"
-                       FontSize="18"
+                       FontSize="Body"
                        HorizontalOptions="Fill"
                        HorizontalTextAlignment="Center" />
                 <Label Text="Tap the 'Search' button above ⬆️ to start looking for devices. 📱"
-                       Margin="10,25,10,10"
+                       Margin="10,20,10,0"
                        FontAttributes="Bold"
-                       FontSize="18"
+                       FontSize="Body"
                        HorizontalOptions="Fill"
                        HorizontalTextAlignment="Center" />
             </StackLayout>
-        </DataTemplate>
-        <DataTemplate x:Key="NotAllowedEmptyView">
-            <StackLayout>
-                <Label>
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Alternatively, click " />
-                            <Span Text="here"
-                                  TextColor="Blue"
-                                  TextDecorations="Underline">
-                                <Span.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding TapCommand}"
-                                                          CommandParameter="https://learn.microsoft.com/xamarin/" />
-                                </Span.GestureRecognizers>  
-                            </Span>
-                            <Span Text=" to view Xamarin documentation." />
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
-                <Label Text="No results matched your filter."
-                       Margin="10,25,10,10"
-                       FontAttributes="Bold"
-                       FontSize="18"
-                       HorizontalOptions="Fill"
-                       HorizontalTextAlignment="Center" />
-                <Label Text="Try a broader filter?"
-                       FontAttributes="Italic"
-                       FontSize="12"
-                       HorizontalOptions="Fill"
-                       HorizontalTextAlignment="Center" />
-            </StackLayout>
-        </DataTemplate>
-        <controls:BluetoothPermissionStateDataTemplateSelector x:Key="BluetoothPermissionStateSelector"
-                                                               DefaultTemplate="{StaticResource BasicEmptyView}"
-                                                               OtherTemplate="{StaticResource NotAllowedEmptyView}" />
+        </ContentView>
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems> 
         <ToolbarItem x:Name="btnSearch"
                      Text="Search"
                      Clicked="btnSearch_Clicked" />
+        <ToolbarItem x:Name="btnAuth"
+                     Text="Auth"
+                     Clicked="btnAuth_Clicked" />
+        <ToolbarItem x:Name="btnState"
+                     Text="State"
+                     Clicked="btnState_Clicked" />
     </ContentPage.ToolbarItems>
 
     <StackLayout>
@@ -74,8 +46,7 @@
              Command="{Binding RefreshCommand}">
             <CollectionView x:Name="devicesCollection"
                             ItemsSource="{Binding DeviceNames}"
-                            EmptyView="{Binding BluetoothPermissionStatus}"
-                            EmptyViewTemplate="{StaticResource BluetoothPermissionStateSelector}">
+                            EmptyView="{StaticResource BasicEmptyView}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="10">

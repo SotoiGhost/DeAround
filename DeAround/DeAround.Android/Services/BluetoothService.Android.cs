@@ -51,10 +51,10 @@ namespace DeAround.Droid.Services {
 		public BluetoothPermissionStatus PermissionStatus {
 			get {
 				var permission = BluetoothPermissionStatus.Allowed;
-				var availablePermissions = PermissionConstants.BluetoothPermissions.Where (p => Android.OS.Build.VERSION.SdkInt >= p.Value);
+				var availablePermissions = PermissionConstants.RuntimePermissions.Where (p => Android.OS.Build.VERSION.SdkInt >= p.Value);
 
 				foreach (var (permissionName, _) in availablePermissions)
-					if (MainApplication.ActivityContext?.CheckSelfPermission (Manifest.Permission.Bluetooth) == Permission.Denied) {
+					if (MainApplication.ActivityContext?.CheckSelfPermission (permissionName) == Permission.Denied) {
 						permission = BluetoothPermissionStatus.NotAllowed;
 						break;
 					}
@@ -65,7 +65,7 @@ namespace DeAround.Droid.Services {
 
 		public void RequestPermission ()
 		{
-			var availablePermissions = PermissionConstants.BluetoothPermissions.Where (p => Android.OS.Build.VERSION.SdkInt >= p.Value)
+			var availablePermissions = PermissionConstants.RuntimePermissions.Where (p => Android.OS.Build.VERSION.SdkInt >= p.Value)
 				.Select (kv => kv.Key)
 				.ToArray ();
 			var activity = (Activity) MainApplication.ActivityContext!;

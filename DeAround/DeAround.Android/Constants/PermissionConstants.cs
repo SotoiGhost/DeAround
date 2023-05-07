@@ -4,11 +4,11 @@ using Android;
 
 namespace DeAround.Droid.Constants {
 	public static class PermissionConstants {
-		public static Dictionary<string, Android.OS.BuildVersionCodes> BluetoothPermissions = new () {
-			[Manifest.Permission.Bluetooth] = Android.OS.BuildVersionCodes.Donut,
-			[Manifest.Permission.BluetoothAdmin] = Android.OS.BuildVersionCodes.Donut,
-			[Manifest.Permission.BluetoothScan] = Android.OS.BuildVersionCodes.S,
+		public static Dictionary<string, Android.OS.BuildVersionCodes> RuntimePermissions = new () {
 			[Manifest.Permission.AccessCoarseLocation] = Android.OS.BuildVersionCodes.Donut,
+			[Manifest.Permission.AccessFineLocation] = Android.OS.BuildVersionCodes.Donut,
+			[Manifest.Permission.BluetoothConnect] = Android.OS.BuildVersionCodes.S,
+			[Manifest.Permission.BluetoothScan] = Android.OS.BuildVersionCodes.S,
 		};
 	}
 }

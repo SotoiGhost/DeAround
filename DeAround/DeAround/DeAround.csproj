@@ -21,7 +21,6 @@
 		<None Remove="ViewModels\" />
 		<None Remove="Views\" />
 		<None Remove="Controls\" />
-		<None Remove="Converters\" />
 		<None Remove="Constants\" />
 		<None Remove="Resources\" />
 		<None Remove="Resources\Styles\" />
@@ -32,7 +31,6 @@
 		<Folder Include="ViewModels\" />
 		<Folder Include="Views\" />
 		<Folder Include="Controls\" />
-		<Folder Include="Converters\" />
 		<Folder Include="Constants\" />
 		<Folder Include="Resources\" />
 		<Folder Include="Resources\Styles\" />

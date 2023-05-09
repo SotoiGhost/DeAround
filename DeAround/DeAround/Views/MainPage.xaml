@@ -10,14 +10,14 @@
              ios:Page.LargeTitleDisplay="Automatic">
 
     <ContentPage.Resources>
-        <ContentView x:Key="WelcomeEmptyView">
+        <DataTemplate x:Key="WelcomeEmptyView">
             <StackLayout>
                 <Label Text="There's nothing to see here... 👀"
                        Style="{StaticResource MessageLabelStyle}" />
                 <Label Text="Tap the 'Search' button above ⬆️ to start looking for devices. 📱"
                        Style="{StaticResource MessageLabelStyle}" />
             </StackLayout>
-        </ContentView>
+        </DataTemplate>
         <DataTemplate x:Key="SearchingEmptyView">
             <StackLayout>
                 <Label Text="Looking for devices... 📱👀"
@@ -65,7 +65,8 @@
     <StackLayout>
         <CollectionView x:Name="devicesCollection"
                         ItemsSource="{Binding DeviceNames}"
-                        EmptyView="{StaticResource WelcomeEmptyView}">
+                        EmptyView="{Binding IsSearching}"
+                        EmptyViewTemplate="{StaticResource SearchingDataTemplateSelector}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="10">

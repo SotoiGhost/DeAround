@@ -8,6 +8,27 @@
              x:Class="DeAround.Views.MainPage"
              ios:Page.UseSafeArea="True"
              ios:Page.LargeTitleDisplay="Automatic">
+
+    <ContentPage.Resources>
+        <ContentView x:Key="WelcomeEmptyView">
+            <StackLayout>
+                <Label Text="There's nothing to see here... 👀"
+                       Style="{StaticResource MessageLabelStyle}" />
+                <Label Text="Tap the 'Search' button above ⬆️ to start looking for devices. 📱"
+                       Style="{StaticResource MessageLabelStyle}" />
+            </StackLayout>
+        </ContentView>
+        <DataTemplate x:Key="SearchingEmptyView">
+            <StackLayout>
+                <Label Text="Looking for devices... 📱👀"
+                       Style="{StaticResource MessageLabelStyle}" />
+            </StackLayout>
+        </DataTemplate>
+        <controls:SearchingDataTemplateSelector x:Key="SearchingDataTemplateSelector"
+                                                DefaultTemplate="{StaticResource WelcomeEmptyView}"
+                                                OtherTemplate="{StaticResource SearchingEmptyView}" />
+    </ContentPage.Resources>
+
     <ContentPage.BindingContext>
         <viewModels:BluetoothViewModel />
     </ContentPage.BindingContext>
@@ -17,13 +38,13 @@
             <Label Text="DeAround"
                    HorizontalOptions="StartAndExpand"
                    VerticalOptions="CenterAndExpand"
-                   FontAttributes="Bold"
-                   FontSize="20" />
+                   Style="{StaticResource NavigationLabelStyle}"/>
             <ActivityIndicator IsRunning="{Binding IsSearching}"
                                HorizontalOptions="End" />
             <Button Text="Search"
                     HorizontalOptions="End"
                     VerticalOptions="End"
+                    Style="{StaticResource NavigationButtonStyle}"
                     Clicked="Search_Clicked">
                 <Button.Triggers>
                     <DataTrigger TargetType="Button"
@@ -41,43 +62,10 @@
         </StackLayout>
     </NavigationPage.TitleView>
 
-    <ContentPage.Resources>
-        <DataTemplate x:Key="WelcomeEmptyView">
-            <StackLayout>
-                <Label Text="There's nothing to see here... 👀"
-                       Margin="10,20,10,0"
-                       FontAttributes="Bold"
-                       FontSize="Body"
-                       HorizontalOptions="Fill"
-                       HorizontalTextAlignment="Center" />
-                <Label Text="Tap the 'Search' button above ⬆️ to start looking for devices. 📱"
-                       Margin="10,20,10,0"
-                       FontAttributes="Bold"
-                       FontSize="Body"
-                       HorizontalOptions="Fill"
-                       HorizontalTextAlignment="Center" />
-            </StackLayout>
-        </DataTemplate>
-        <DataTemplate x:Key="SearchingEmptyView">
-            <StackLayout>
-                <Label Text="Looking for devices... 📱👀"
-                       Margin="10,20,10,0"
-                       FontAttributes="Bold"
-                       FontSize="Body"
-                       HorizontalOptions="Fill"
-                       HorizontalTextAlignment="Center" />
-            </StackLayout>
-        </DataTemplate>
-        <controls:SearchingDataTemplateSelector x:Key="SearchingDataTemplateSelector"
-                                                DefaultTemplate="{StaticResource WelcomeEmptyView}"
-                                                OtherTemplate="{StaticResource SearchingEmptyView}" />
-    </ContentPage.Resources>
-
     <StackLayout>
         <CollectionView x:Name="devicesCollection"
                         ItemsSource="{Binding DeviceNames}"
-                        EmptyView="{Binding IsSearching}"
-                        EmptyViewTemplate="{StaticResource SearchingDataTemplateSelector}">
+                        EmptyView="{StaticResource WelcomeEmptyView}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="10">
@@ -90,11 +78,12 @@
                                 FontSize="Large"
                                 FontAttributes="Bold" />
                         <Label Grid.Row="1"
-                                Text="Testing"
-                                FontSize="Small"
-                                FontAttributes="Italic" 
-                                VerticalOptions="End" />
-                        <Line Grid.Row="2" X2="350" Stroke="Red" />
+                               Text="Testing"
+                               FontSize="Small"
+                               FontAttributes="Italic"
+                               Margin="20, 0, 10, 0"
+                               VerticalOptions="End" />
+                        <Line Grid.Row="2" X2="350" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

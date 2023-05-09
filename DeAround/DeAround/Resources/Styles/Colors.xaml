@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="DeAround.Resources.Styles.Colors">
+    <Color x:Key="Primary">#212A3E</Color>
+    <Color x:Key="Secondary">#F1F6F9</Color>
+    <Color x:Key="Tertiary">#394867</Color>
+    <Color x:Key="Quaternary">#AFD3E2</Color>
+</ResourceDictionary>
+

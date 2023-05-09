@@ -12,32 +12,19 @@
     </pages:PopupPage.BindingContext>
 
     <pages:PopupPage.Content>
-        <Frame HasShadow="False" CornerRadius="6"
-               HorizontalOptions="Center" VerticalOptions="Center" BackgroundColor="Aqua">
+        <Frame Style="{StaticResource PopupStyle}">
             <StackLayout>
                 <Label Text="Here in DeAround, we love to look for devices around you! ❤️"
-                       Margin="10,0,10,0"
-                       FontAttributes="Bold"
-                       FontSize="Body"
-                       HorizontalOptions="Fill"
-                       HorizontalTextAlignment="Center" />
+                       Style="{StaticResource MessageLabelStyle}" />
                 <Label Text="To do so, we need your permission to access the Bluetooth service and maybe for your location."
-                       Margin="10,0,10,0"
-                       FontAttributes="Bold"
-                       FontSize="Body"
-                       HorizontalOptions="Fill"
-                       HorizontalTextAlignment="Center" />
+                       Style="{StaticResource MessageLabelStyle}" />
                 <Label Text="We'll only use it to find devices around you, we promise! 🙏"
-                       Margin="10,0,10,0"
-                       FontAttributes="Bold"
-                       FontSize="Body"
-                       HorizontalOptions="Fill"
-                       HorizontalTextAlignment="Center" />
+                       Margin="10,20,10,20"
+                       Style="{StaticResource MessageLabelStyle}" />
                 <Button Text="Go ahead!"
-                        Clicked="Request_Clicked"
-                        Margin="10,20,10,0" />
+                        Clicked="Request_Clicked" />
                 <Button Text="Cancel"
-                        Margin="10,0,10,0"
+                        FontAttributes="None"
                         Clicked="Cancel_Clicked"/>
             </StackLayout>
         </Frame>

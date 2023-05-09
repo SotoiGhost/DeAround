@@ -23,6 +23,8 @@
 		<None Remove="Controls\" />
 		<None Remove="Converters\" />
 		<None Remove="Constants\" />
+		<None Remove="Resources\" />
+		<None Remove="Resources\Styles\" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Services\" />
@@ -32,5 +34,7 @@
 		<Folder Include="Controls\" />
 		<Folder Include="Converters\" />
 		<Folder Include="Constants\" />
+		<Folder Include="Resources\" />
+		<Folder Include="Resources\Styles\" />
 	</ItemGroup>
 </Project>

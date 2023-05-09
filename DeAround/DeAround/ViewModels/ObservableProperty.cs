@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace DeAround.ViewModels {
-	public class BaseViewModel : INotifyPropertyChanged {
+	public class BaseViewModel : INotifyPropertyChanged, IDisposable {
 		public event PropertyChangedEventHandler? PropertyChanged;
 
 		protected virtual void OnPropertyChanged ([CallerMemberName] string? propertyName = null)
@@ -21,6 +21,10 @@ namespace DeAround.ViewModels {
 			OnPropertyChanged (propertyName);
 
 			return true;
+		}
+
+		public virtual void Dispose ()
+		{
 		}
 	}
 }

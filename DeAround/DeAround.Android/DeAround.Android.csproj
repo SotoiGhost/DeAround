@@ -71,6 +71,7 @@
 		<Compile Include="Callbacks\BluetoothLeScanCallback.cs" />
 		<Compile Include="Constants\PermissionConstants.cs" />
 		<Compile Include="Callbacks\BackPressedCallback.cs" />
+		<Compile Include="Singletons\BluetoothServiceSingleton.cs" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="Resources\AboutResources.txt" />
@@ -98,6 +99,7 @@
 		<Folder Include="Services\" />
 		<Folder Include="Callbacks\" />
 		<Folder Include="Constants\" />
+		<Folder Include="Singletons\" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\DeAround\DeAround.csproj">

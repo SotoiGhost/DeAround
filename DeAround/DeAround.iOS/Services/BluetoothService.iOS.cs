@@ -27,7 +27,6 @@ namespace DeAround.iOS.Services {
 
 		#region IBluetoothService implementation
 
-		public event EventHandler? UpdatedPermission;
 		public event EventHandler? UpdatedState;
 		public event EventHandler<BluetoothServiceDiscoveredDeviceEventArgs>? DiscoveredDevice;
 
@@ -48,7 +47,6 @@ namespace DeAround.iOS.Services {
 		public void RequestPermission ()
 		{
 			InitializeBluetoothIfNeeded ();
-			UpdatedPermission?.Invoke (this, EventArgs.Empty);
 		}
 
 		public bool IsSupported {

@@ -12,7 +12,7 @@ using DeAround.Models;
 using DeAround.Services;
 
 namespace DeAround.ViewModels {
-	public class BluetoothViewModel : BaseViewModel, IDisposable {
+	public class BluetoothViewModel : BaseViewModel {
 
 		bool searching;
 		IBluetoothService bluetoothService;
@@ -28,7 +28,7 @@ namespace DeAround.ViewModels {
 		public BluetoothPermissionStatus BluetoothPermissionStatus => bluetoothService.PermissionStatus;
 		public bool IsBluetoothSupported => bluetoothService.IsSupported;
 		public bool IsBluetoothEnabled => bluetoothService.IsEnabled;
-		public bool Searching {
+		public bool IsSearching {
 			get => searching;
 			set => SetProperty (ref searching, value);
 		}
@@ -39,21 +39,18 @@ namespace DeAround.ViewModels {
 			StartSearchingCommand = new Command (StartSearching);
 			StopSearchingCommand = new Command (StopSearching);
 			bluetoothService = DependencyService.Get<IBluetoothService> ();
-			bluetoothService.UpdatedPermission += BluetoothService_UpdatedPermission;
 			bluetoothService.UpdatedState += BluetoothService_ChangedState;
 			bluetoothService.DiscoveredDevice += BluetoothService_DiscoveredDevice;
 		}
 
 		void RequestBluetoothPermission ()
 		{
-			Preferences.Set (PreferencesKeys.FirstTime, false);
 			bluetoothService.RequestPermission ();
-			OnPropertyChanged (nameof (IsFirstTime));
 		}
 
 		void StartSearching ()
 		{
-			Searching = true;
+			IsSearching = true;
 			DeviceNames.Clear ();
 
 			if (source != null) {
@@ -71,7 +68,7 @@ namespace DeAround.ViewModels {
 		{
 			source?.Cancel ();
 			bluetoothService.StopScanning ();
-			Searching = false;
+			IsSearching = false;
 		}
 
 		async Task SearchByIntervals (int searchingIntervalInSeconds, int pauseIntervalInSeconds, CancellationToken token)
@@ -82,8 +79,6 @@ namespace DeAround.ViewModels {
 				bluetoothService.StartScanning ();
 				await Task.Delay (searchingIntervalInSeconds * 1000, token);
 
-				if (token.IsCancellationRequested) return;
-
 				bluetoothService.StopScanning ();
 				await Task.Delay (pauseIntervalInSeconds * 1000, token);
 
@@ -91,13 +86,18 @@ namespace DeAround.ViewModels {
 			} while (true);
 		}
 
-		void BluetoothService_UpdatedPermission (object sender, EventArgs e) =>
-			OnPropertyChanged (nameof (BluetoothPermissionStatus));
-
 		void BluetoothService_ChangedState (object sender, EventArgs e)
 		{
 			OnPropertyChanged (nameof (IsBluetoothSupported));
 			OnPropertyChanged (nameof (IsBluetoothEnabled));
+
+			if (IsFirstTime) {
+				Preferences.Set (PreferencesKeys.FirstTime, false);
+				OnPropertyChanged (nameof (IsFirstTime));
+
+				if (BluetoothPermissionStatus == BluetoothPermissionStatus.Allowed)
+					StartSearching ();
+			}
 		}
 
 		void BluetoothService_DiscoveredDevice (object sender, BluetoothServiceDiscoveredDeviceEventArgs e)
@@ -106,9 +106,8 @@ namespace DeAround.ViewModels {
 				DeviceNames.Add (e.DeviceName);
 		}
 
-		public void Dispose ()
+		public override void Dispose ()
 		{
-			bluetoothService.UpdatedPermission -= BluetoothService_UpdatedPermission;
 			bluetoothService.UpdatedState -= BluetoothService_ChangedState;
 			bluetoothService.DiscoveredDevice -= BluetoothService_DiscoveredDevice;
 		}

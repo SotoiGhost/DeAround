@@ -4,11 +4,37 @@
              xmlns:local="clr-namespace:DeAround"
              xmlns:controls="clr-namespace:DeAround.Controls"
              xmlns:viewModels="clr-namespace:DeAround.ViewModels"
-             x:Class="DeAround.Views.MainPage"
-             Title="DeAround">
+             x:Class="DeAround.Views.MainPage">
     <ContentPage.BindingContext>
         <viewModels:BluetoothViewModel />
     </ContentPage.BindingContext>
+
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="DeAround"
+                   HorizontalOptions="StartAndExpand"
+                   VerticalOptions="CenterAndExpand"
+                   FontAttributes="Bold"
+                   FontSize="20" />
+            <Button Text="Search"
+                    HorizontalOptions="End"
+                    VerticalOptions="End"
+                    Clicked="Search_Clicked">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button"
+                                 Binding="{Binding IsSearching}"
+                                 Value="True">
+                        <Setter Property="Text" Value="Stop" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Button"
+                                 Binding="{Binding IsSearching}"
+                                 Value="False">
+                        <Setter Property="Text" Value="Search" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+        </StackLayout>
+    </NavigationPage.TitleView>
 
     <ContentPage.Resources>
         <DataTemplate x:Key="WelcomeEmptyView">
@@ -42,14 +68,8 @@
                                                 OtherTemplate="{StaticResource SearchingEmptyView}" />
     </ContentPage.Resources>
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="btnSearch"
-                     Text="Search"
-                     Clicked="btnSearch_Clicked" />
-    </ContentPage.ToolbarItems>
-
     <StackLayout>
-        <RefreshView IsRefreshing="{Binding Searching}">
+        <RefreshView IsRefreshing="{Binding IsSearching}">
             <CollectionView x:Name="devicesCollection"
                             ItemsSource="{Binding DeviceNames}"
                             EmptyView="{Binding Searching}"

@@ -19,20 +19,21 @@ namespace DeAround.Views {
 			InitializeComponent ();
 		}
 
-		async void btnSearch_Clicked (System.Object sender, System.EventArgs e)
+		async void Search_Clicked (System.Object sender, System.EventArgs e)
 		{
 			var bluetoothViewModel = (BluetoothViewModel) BindingContext;
 
 			if (bluetoothViewModel.IsFirstTime) {
 				var page = new RequestBluetoothPermissionPage ();
 				await PopupNavigation.Instance.PushAsync (page);
+			} else if (bluetoothViewModel.BluetoothPermissionStatus == BluetoothPermissionStatus.NotAllowed) {
+				var page = new ServiceNotAllowedPage ();
+				await PopupNavigation.Instance.PushAsync (page);
 			} else {
-				if (bluetoothViewModel.Searching) {
+				if (bluetoothViewModel.IsSearching) {
 					bluetoothViewModel.StopSearchingCommand.Execute (null);
-					btnSearch.Text = "Search";
 				} else {
 					bluetoothViewModel.StartSearchingCommand.Execute (null);
-					btnSearch.Text = "Stop";
 				}
 			}
 		}

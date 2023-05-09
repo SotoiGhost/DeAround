@@ -15,7 +15,6 @@ using DeAround.Droid.Callbacks;
 using DeAround.Services;
 using DeAround.Models;
 
-[assembly: Dependency (typeof (DeAround.Droid.Services.BluetoothService))]
 namespace DeAround.Droid.Services {
 	public class BluetoothService : IBluetoothService {
 		public const int RequestCode = 1000;
@@ -44,7 +43,6 @@ namespace DeAround.Droid.Services {
 
 		#region IBluetoothService implementation
 
-		public event EventHandler? UpdatedPermission;
 		public event EventHandler? UpdatedState;
 		public event EventHandler<BluetoothServiceDiscoveredDeviceEventArgs>? DiscoveredDevice;
 
@@ -102,5 +100,7 @@ namespace DeAround.Droid.Services {
 			DiscoveredDevice?.Invoke (this, e);
 
 		#endregion
+
+		public void NotifyUpdatedState () => UpdatedState?.Invoke (this, EventArgs.Empty);
 	}
 }

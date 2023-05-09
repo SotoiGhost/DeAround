@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="http://rotorgames.com"
+    xmlns:viewModels="clr-namespace:DeAround.ViewModels"
+    x:Class="DeAround.Views.ServiceNotAllowedPage"
+    Padding="20, 0, 20, 0">
+
+    <pages:PopupPage.BindingContext>
+        <viewModels:BluetoothViewModel />
+    </pages:PopupPage.BindingContext>
+
+    <pages:PopupPage.Content>
+        <Frame HasShadow="False" CornerRadius="6"
+               HorizontalOptions="Center" VerticalOptions="Center" BackgroundColor="Aqua">
+            <StackLayout>
+                <Label Text="⚠️"
+                       Margin="10,0,10,0"
+                       FontAttributes="Bold"
+                       FontSize="Body"
+                       HorizontalOptions="Fill"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Here in DeAround, we love to look for devices around you! ❤️"
+                       Margin="10,0,10,0"
+                       FontAttributes="Bold"
+                       FontSize="Body"
+                       HorizontalOptions="Fill"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="To do so, we need your permission to access the Bluetooth service and maybe for your location."
+                       Margin="10,0,10,0"
+                       FontAttributes="Bold"
+                       FontSize="Body"
+                       HorizontalOptions="Fill"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="You may see this message if the Bluetooth service is not avaiable in your device or because we have not been granted permission..."
+                       Margin="10,0,10,0"
+                       FontAttributes="Bold"
+                       FontSize="Body"
+                       HorizontalOptions="Fill"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="We understand that your safety is the most important thing for you (it is for us too!). We will not use the permissions for anything improper, we promise! 🙏"
+                       Margin="10,0,10,0"
+                       FontAttributes="Bold"
+                       FontSize="Body"
+                       HorizontalOptions="Fill"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="If you change your mind, go to the Settings app and authorize the use of Bluetooth and location (only if you were asked to authorize it!)."
+                       Margin="10,0,10,0"
+                       FontAttributes="Bold"
+                       FontSize="Body"
+                       HorizontalOptions="Fill"
+                       HorizontalTextAlignment="Center" />
+                <Button Text="I'll think about it!"
+                        
+                        Margin="10,20,10,0" />
+                <Button Text="Take me to Settings!"
+                        Margin="10,0,10,0"
+                        Clicked="Cancel_Clicked" />
+            </StackLayout>
+        </Frame>
+    </pages:PopupPage.Content>
+</pages:PopupPage>
+

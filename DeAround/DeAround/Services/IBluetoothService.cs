@@ -9,8 +9,6 @@ namespace DeAround.Services {
 		/// </summary>
 		event EventHandler<BluetoothServiceDiscoveredDeviceEventArgs>? DiscoveredDevice;
 
-		event EventHandler? UpdatedPermission;
-
 		event EventHandler? UpdatedState;
 
 		BluetoothPermissionStatus PermissionStatus { get; }

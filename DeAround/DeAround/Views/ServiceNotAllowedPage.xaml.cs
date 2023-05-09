@@ -9,20 +9,16 @@ using Rg.Plugins.Popup.Services;
 
 namespace DeAround.Views {
 	public partial class ServiceNotAllowedPage : PopupPage {
+		BluetoothViewModel? bluetoothViewModel;
+
 		public ServiceNotAllowedPage ()
 		{
 			InitializeComponent ();
+			bluetoothViewModel = (BluetoothViewModel) BindingContext;
 		}
 
 		void OnClose (object sender, EventArgs e)
 		{
-			ClosePopup ();
-		}
-
-		void Request_Clicked (System.Object sender, System.EventArgs e)
-		{
-			var bluetoothViewModel = (BluetoothViewModel) BindingContext;
-			bluetoothViewModel.RequestBluetoothPermissionCommand.Execute (null);
 			ClosePopup ();
 		}
 
@@ -33,10 +29,15 @@ namespace DeAround.Views {
 
 		void ClosePopup ()
 		{
-			var bluetoothViewModel = (BluetoothViewModel) BindingContext;
-			bluetoothViewModel.Dispose ();
+			bluetoothViewModel?.Dispose ();
 			bluetoothViewModel = null;
 			PopupNavigation.Instance.PopAsync ();
+		}
+
+		void OpenSettings_Clicked (System.Object sender, System.EventArgs e)
+		{
+			bluetoothViewModel?.OpenSettingsCommand.Execute (null);
+			ClosePopup ();
 		}
 	}
 }

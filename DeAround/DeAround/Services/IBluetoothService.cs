@@ -35,11 +35,6 @@ namespace DeAround.Services {
 		/// </summary>
 		void StopScanning ();
 
-		void OpenSettings ();
-
-		string OpenSettingsMessage { get; }
-
 		void RequestPermission ();
-
 	}
 }

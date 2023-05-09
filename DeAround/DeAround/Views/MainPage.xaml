@@ -4,7 +4,10 @@
              xmlns:local="clr-namespace:DeAround"
              xmlns:controls="clr-namespace:DeAround.Controls"
              xmlns:viewModels="clr-namespace:DeAround.ViewModels"
-             x:Class="DeAround.Views.MainPage">
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             x:Class="DeAround.Views.MainPage"
+             ios:Page.UseSafeArea="True"
+             ios:Page.LargeTitleDisplay="Automatic">
     <ContentPage.BindingContext>
         <viewModels:BluetoothViewModel />
     </ContentPage.BindingContext>
@@ -16,6 +19,8 @@
                    VerticalOptions="CenterAndExpand"
                    FontAttributes="Bold"
                    FontSize="20" />
+            <ActivityIndicator IsRunning="{Binding IsSearching}"
+                               HorizontalOptions="End" />
             <Button Text="Search"
                     HorizontalOptions="End"
                     VerticalOptions="End"
@@ -69,33 +74,31 @@
     </ContentPage.Resources>
 
     <StackLayout>
-        <RefreshView IsRefreshing="{Binding IsSearching}">
-            <CollectionView x:Name="devicesCollection"
-                            ItemsSource="{Binding DeviceNames}"
-                            EmptyView="{Binding Searching}"
-                            EmptyViewTemplate="{StaticResource SearchingDataTemplateSelector}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Padding="10">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Label Text="{Binding .}"
-                                   FontSize="Large"
-                                   FontAttributes="Bold" />
-                            <Label Grid.Row="1"
-                                   Text="Testing"
-                                   FontSize="Small"
-                                   FontAttributes="Italic" 
-                                   VerticalOptions="End" />
-                            <Line Grid.Row="2" X2="350" Stroke="Red" />
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </RefreshView>
+        <CollectionView x:Name="devicesCollection"
+                        ItemsSource="{Binding DeviceNames}"
+                        EmptyView="{Binding IsSearching}"
+                        EmptyViewTemplate="{StaticResource SearchingDataTemplateSelector}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Label Text="{Binding .}"
+                                FontSize="Large"
+                                FontAttributes="Bold" />
+                        <Label Grid.Row="1"
+                                Text="Testing"
+                                FontSize="Small"
+                                FontAttributes="Italic" 
+                                VerticalOptions="End" />
+                        <Line Grid.Row="2" X2="350" Stroke="Red" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </StackLayout>
 
 </ContentPage>

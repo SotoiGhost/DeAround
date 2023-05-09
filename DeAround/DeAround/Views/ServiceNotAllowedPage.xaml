@@ -52,11 +52,11 @@
                        HorizontalOptions="Fill"
                        HorizontalTextAlignment="Center" />
                 <Button Text="I'll think about it!"
-                        
+                        Clicked="Cancel_Clicked"
                         Margin="10,20,10,0" />
                 <Button Text="Take me to Settings!"
                         Margin="10,0,10,0"
-                        Clicked="Cancel_Clicked" />
+                        Clicked="OpenSettings_Clicked" />
             </StackLayout>
         </Frame>
     </pages:PopupPage.Content>

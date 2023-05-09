@@ -86,13 +86,6 @@ namespace DeAround.iOS.Services {
 			bluetoothCentralManager?.StopScan ();
 		}
 
-		public void OpenSettings ()
-		{
-			throw new NotImplementedException ();
-		}
-
-		public string OpenSettingsMessage => "";
-
 		#endregion
 
 		#region CBCentralManager event handlers

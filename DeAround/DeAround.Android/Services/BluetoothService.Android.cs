@@ -85,13 +85,6 @@ namespace DeAround.Droid.Services {
 			bluetoothLeScanner?.StopScan (bluetoothLeScanCallback);
 		}
 
-		public void OpenSettings ()
-		{
-			throw new NotImplementedException ();
-		}
-
-		public string OpenSettingsMessage => throw new NotImplementedException ();
-
 		#endregion
 
 		#region BluetoothLeScanCallback events

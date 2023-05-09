@@ -23,6 +23,7 @@ namespace DeAround.ViewModels {
 		public ICommand RequestBluetoothPermissionCommand { get; private set; }
 		public ICommand StartSearchingCommand { get; private set; }
 		public ICommand StopSearchingCommand { get; private set; }
+		public ICommand OpenSettingsCommand { get; private set; }
 
 		public bool IsFirstTime => Preferences.Get (PreferencesKeys.FirstTime, true);
 		public BluetoothPermissionStatus BluetoothPermissionStatus => bluetoothService.PermissionStatus;
@@ -38,15 +39,13 @@ namespace DeAround.ViewModels {
 			RequestBluetoothPermissionCommand = new Command (RequestBluetoothPermission);
 			StartSearchingCommand = new Command (StartSearching);
 			StopSearchingCommand = new Command (StopSearching);
+			OpenSettingsCommand = new Command (OpenSettings);
 			bluetoothService = DependencyService.Get<IBluetoothService> ();
 			bluetoothService.UpdatedState += BluetoothService_ChangedState;
 			bluetoothService.DiscoveredDevice += BluetoothService_DiscoveredDevice;
 		}
 
-		void RequestBluetoothPermission ()
-		{
-			bluetoothService.RequestPermission ();
-		}
+		void RequestBluetoothPermission () => bluetoothService.RequestPermission ();
 
 		void StartSearching ()
 		{
@@ -70,6 +69,8 @@ namespace DeAround.ViewModels {
 			bluetoothService.StopScanning ();
 			IsSearching = false;
 		}
+
+		void OpenSettings () => Xamarin.Essentials.AppInfo.ShowSettingsUI ();
 
 		async Task SearchByIntervals (int searchingIntervalInSeconds, int pauseIntervalInSeconds, CancellationToken token)
 		{

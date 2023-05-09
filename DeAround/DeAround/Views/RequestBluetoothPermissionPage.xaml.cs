@@ -10,9 +10,12 @@ using DeAround.ViewModels;
 
 namespace DeAround.Views {
 	public partial class RequestBluetoothPermissionPage : PopupPage {
+		BluetoothViewModel? bluetoothViewModel;
+
 		public RequestBluetoothPermissionPage ()
 		{
 			InitializeComponent ();
+			bluetoothViewModel = (BluetoothViewModel) BindingContext;
 		}
 
 		void OnClose (object sender, EventArgs e)
@@ -22,8 +25,7 @@ namespace DeAround.Views {
 
 		void Request_Clicked (System.Object sender, System.EventArgs e)
 		{
-			var bluetoothViewModel = (BluetoothViewModel) BindingContext;
-			bluetoothViewModel.RequestBluetoothPermissionCommand.Execute (null);
+			bluetoothViewModel?.RequestBluetoothPermissionCommand.Execute (null);
 			ClosePopup ();
 		}
 
@@ -34,8 +36,7 @@ namespace DeAround.Views {
 
 		void ClosePopup ()
 		{
-			var bluetoothViewModel = (BluetoothViewModel) BindingContext;
-			bluetoothViewModel.Dispose ();
+			bluetoothViewModel?.Dispose ();
 			bluetoothViewModel = null;
 			PopupNavigation.Instance.PopAsync ();
 		}
